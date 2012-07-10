@@ -69,6 +69,7 @@ function watchFolder(folder, path) {
 
   fs.readdir(folder_path, function (err, files) {
     files.forEach(function (filename) {
+      if (excludes.indexOf(filename) !== -1) return;
       var file_path = folder_path + '/' + filename
       fs.stat(file_path, function (err, stats) {
         if(stats.isFile()) {
