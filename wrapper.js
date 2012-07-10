@@ -57,6 +57,31 @@ function checkExitCode(code) {
   }
 }
 
+var folders = ['assets'];
+var excludes = ['.DS_Store'];
+
+folders.forEach(function (folder) {
+  watchFolder(folder, process.cwd());
+});
+
+function watchFolder(folder, path) {
+  var folder_path = path + '/' + folder
+
+  fs.readdir(folder_path, function (err, files) {
+    files.forEach(function (filename) {
+      var file_path = folder_path + '/' + filename
+      fs.stat(file_path, function (err, stats) {
+        if(stats.isFile()) {
+          watch(file_path);
+        } 
+        if (stats.isDirectory()) {
+          watchFolder(filename, folder_path);
+        }
+      });
+    });
+  });
+}
+
 /**
  * Watches the specified file and triggers a restart upon modification.
  */
